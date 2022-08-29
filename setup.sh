@@ -1,10 +1,3 @@
-echo "Creating an SSH key for you..."
-ssh-keygen -t rsa
-
-echo "Please add this public key to Github \n"
-echo "https://github.com/account/ssh \n"
-read -p "Press [Enter] key after this..."
-
 echo "Installing xcode-stuff"
 xcode-select --install
 
@@ -15,6 +8,10 @@ if test ! $(which brew); then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
+# Add brew to path
+echo 'eval $(/opt/homebrew/bin/brew shellenv)' >> $HOME/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # Update homebrew recipes
 echo "Updating homebrew..."
 brew update
@@ -23,9 +20,8 @@ echo "Installing Git..."
 brew install git
 
 echo "Git config"
-
-git config --global user.name "Brad Parbs"
-git config --global user.email brad@bradparbs.com
+# git config --global user.name
+# git config --global user.email 
 
 
 echo "Installing brew git utilities..."
@@ -41,23 +37,12 @@ brew install svn
 brew install mackup
 brew install node
 
-
-#@TODO install our custom fonts and stuff
-
 echo "Cleaning up brew"
 brew cleanup
 
-echo "Installing homebrew cask"
-brew install caskroom/cask/brew-cask
-
 echo "Copying dotfiles from Github"
 cd ~
-git clone git@github.com:bradp/dotfiles.git .dotfiles
-cd .dotfiles
-sh symdotfiles
-
-echo "Grunting it up"
-npm install -g grunt-cli
+wget https://raw.githubusercontent.com/jessefh/mac_setup/main/.zshrc
 
 #Install Zsh & Oh My Zsh
 echo "Installing Oh My ZSH..."
@@ -71,70 +56,26 @@ echo "Setting up Zsh plugins..."
 cd ~/.oh-my-zsh/custom/plugins
 git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
 
-echo "Setting ZSH as shell..."
-chsh -s /bin/zsh
-
 # Apps
 apps=(
-  alfred
-  bartender
-  bettertouchtool
-  cleanmymac
-  cloud
-  colloquy
-  cornerstone
-  diffmerge
-  dropbox
-  filezilla
-  firefox
-  google-chrome
-  harvest
-  hipchat
-  licecap
-  mou
-  phpstorm
-  private-internet-access
-  razer-synapse
-  sourcetree
-  steam
-  spotify
-  vagrant
-  iterm2
-  sublime-text2
-  textexpander
-  virtualbox
-  mailbox
-  vlc
-  skype
-  transmission
-  zoomus
-  onepassword
-  sequel-pro
-  chromecast
-  qlmarkdown
-  qlstephen
-  suspicious-package
+    alfred
+    bettertouchtool
+    cleanmymac
+    google-chrome
+    spotify
+    iterm2
+    visual-studio-code
+    sequel-ace
 )
 
 # Install apps to /Applications
 # Default is: /Users/$user/Applications
 echo "installing apps with Cask..."
-brew cask install --appdir="/Applications" ${apps[@]}
+brew install --cask --appdir="/Applications" ${apps[@]}
 
-brew cask alfred link
-
-brew cask cleanup
 brew cleanup
 
-echo "Please setup and sync Dropbox, and then run this script again."
-read -p "Press [Enter] key after this..."
-
-echo "Restoring setup from Mackup..."
-#mackup restore @TODO uncomment
-
-
 echo "Setting some Mac settings..."
-
 #"Disabling system-wide resume"
 defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
 
@@ -213,14 +154,6 @@ defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock autohide-time-modifier -float 0
 
-#"Setting email addresses to copy as 'foo@example.com' instead of 'Foo Bar <foo@example.com>' in Mail.app"
-defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
-
-#"Enabling UTF-8 ONLY in Terminal.app and setting the Pro theme by default"
-defaults write com.apple.terminal StringEncodings -array 4
-defaults write com.apple.Terminal "Default Window Settings" -string "Pro"
-defaults write com.apple.Terminal "Startup Window Settings" -string "Pro"
-
 #"Preventing Time Machine from prompting to use new hard drives as backup volume"
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
@@ -240,62 +173,12 @@ defaults write com.apple.screencapture location -string "$HOME/Desktop"
 #"Setting screenshot format to PNG"
 defaults write com.apple.screencapture type -string "png"
 
-#"Hiding Safari's bookmarks bar by default"
-defaults write com.apple.Safari ShowFavoritesBar -bool false
-
-#"Hiding Safari's sidebar in Top Sites"
-defaults write com.apple.Safari ShowSidebarInTopSites -bool false
-
-#"Disabling Safari's thumbnail cache for History and Top Sites"
-defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
-
-#"Enabling Safari's debug menu"
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-
-#"Making Safari's search banners default to Contains instead of Starts With"
-defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
-
-#"Removing useless icons from Safari's bookmarks bar"
-defaults write com.apple.Safari ProxiesInBookmarksBar "()"
-
-#"Allow hitting the Backspace key to go to the previous page in history"
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled -bool true
-
-#"Enabling the Develop menu and the Web Inspector in Safari"
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
-
 #"Adding a context menu item for showing the Web Inspector in web views"
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
-
-#"Use `~/Downloads/Incomplete` to store incomplete downloads"
-defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
-defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Incomplete"
-
-#"Don't prompt for confirmation before downloading"
-defaults write org.m0k.transmission DownloadAsk -bool false
-
-#"Trash original torrent files"
-defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
-
-#"Hide the donate message"
-defaults write org.m0k.transmission WarningDonate -bool false
-
-#"Hide the legal disclaimer"
-defaults write org.m0k.transmission WarningLegal -bool false
-
-#"Disable 'natural' (Lion-style) scrolling"
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
 # Don’t automatically rearrange Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false
 
-
-
 killall Finder
 
-
 echo "Done!"
-
-#@TODO install vagrant and sites folder

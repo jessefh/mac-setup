@@ -24,20 +24,8 @@ echo "Git config"
 # git config --global user.email 
 
 
-echo "Installing brew git utilities..."
-brew install git-extras
-brew install legit
-brew install git-flow
-
-echo "Installing other brew stuff..."
-brew install tree
-brew install wget
-brew install trash
-brew install svn
-brew install mackup
-brew install node
-
-echo "Cleaning up brew"
+echo "Installing brew cli utilities..."
+brew install $(cat brew/cli.txt)
 brew cleanup
 
 echo "Copying dotfiles from Github"
@@ -56,23 +44,10 @@ echo "Setting up Zsh plugins..."
 cd ~/.oh-my-zsh/custom/plugins
 git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
 
-# Apps
-apps=(
-    alfred
-    bettertouchtool
-    cleanmymac
-    google-chrome
-    spotify
-    iterm2
-    visual-studio-code
-    sequel-ace
-)
-
 # Install apps to /Applications
 # Default is: /Users/$user/Applications
-echo "installing apps with Cask..."
-brew install --cask --appdir="/Applications" ${apps[@]}
-
+echo "Installing apps with Cask..."
+brew install --cask --appdir="/Applications" $(cat brew/apps.txt)
 brew cleanup
 
 echo "Setting some Mac settings..."

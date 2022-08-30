@@ -1,0 +1,11 @@
+git
+git-extras
+legit
+git-flow
+speedtest-cli
+tree
+wget
+trash
+svn
+mackup
+node

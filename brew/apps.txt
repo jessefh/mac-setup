@@ -1,0 +1,9 @@
+alfred
+bettertouchtool
+cleanmymac
+spotify
+iterm2
+visual-studio-code
+sequel-ace
+lastpass
+bitwarden

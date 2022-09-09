@@ -90,10 +90,6 @@ defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 #"Disabling press-and-hold for keys in favor of a key repeat"
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
-#"Setting trackpad & mouse speed to a reasonable number"
-defaults write -g com.apple.trackpad.scaling 2
-defaults write -g com.apple.mouse.scaling 2.5
-
 #"Enabling subpixel font rendering on non-Apple LCDs"
 defaults write NSGlobalDomain AppleFontSmoothing -int 2
 
@@ -138,9 +134,6 @@ sudo pmset -a sms 0
 #"Speeding up wake from sleep to 24 hours from an hour"
 # http://www.cultofmac.com/221392/quick-hack-speeds-up-retina-macbooks-wake-from-sleep-os-x-tips/
 sudo pmset -a standbydelay 86400
-
-#"Disable annoying backswipe in Chrome"
-defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
 
 #"Setting screenshots location to ~/Desktop"
 defaults write com.apple.screencapture location -string "$HOME/Desktop"
